@@ -7,23 +7,12 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            /* NIMCET THEME: Indigo Blue */
-            --primary: #6366f1; 
-            --primary-dark: #4338ca;
-            --secondary: #10b981; 
-            --accent: #f43f5e; 
-            --bg: #f8fafc;
-            --surface: #ffffff;
-            --text-main: #1e293b;
-            --text-muted: #64748b;
-            --border: #e2e8f0;
+            /* NIMCET THEME */
+            --primary: #6366f1; --primary-dark: #4338ca; --secondary: #10b981; --accent: #f43f5e; 
+            --bg: #f8fafc; --surface: #ffffff; --text-main: #1e293b; --text-muted: #64748b; --border: #e2e8f0;
             --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
-
-        [data-theme="dark"] {
-            --bg: #0f172a; --surface: #1e293b; --text-main: #f1f5f9; --text-muted: #94a3b8; --border: #334155;
-        }
-
+        [data-theme="dark"] { --bg: #0f172a; --surface: #1e293b; --text-main: #f1f5f9; --text-muted: #94a3b8; --border: #334155; }
         * { box-sizing: border-box; transition: 0.3s; }
         body { font-family: 'Inter', sans-serif; background-color: var(--bg); color: var(--text-main); margin: 0; padding-bottom: 20px; }
 
@@ -31,7 +20,7 @@
         .ticker { display: inline-block; white-space: nowrap; animation: ticker 25s linear infinite; padding-left: 100%; }
         @keyframes ticker { 0% { transform: translate3d(0, 0, 0); } 100% { transform: translate3d(-100%, 0, 0); } }
 
-        /* NAV BAR */
+        /* NAV MENU */
         .nav-container { display: flex; justify-content: center; gap: 15px; margin-top: 40px; padding: 10px; position: relative; z-index: 1001; }
         .nav-btn { text-decoration: none; padding: 8px 20px; border-radius: 50px; font-size: 0.85rem; font-weight: 700; transition: all 0.2s; border: 1px solid var(--border); background: rgba(255,255,255,0.5); color: var(--text-muted); }
         .nav-btn.active { background: var(--primary); color: white; border-color: var(--primary); box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4); transform: scale(1.05); }
@@ -45,7 +34,6 @@
         .badge { background: linear-gradient(135deg, #06b6d4, #3b82f6); padding: 5px 12px; border-radius: 20px; font-size: 0.7rem; font-weight: 800; border: 1px solid rgba(255,255,255,0.2); }
         .theme-toggle { background: none; border: none; color: white; font-size: 1.2rem; cursor: pointer; }
 
-        /* COUNTDOWN TIMER STYLES */
         .countdown-display { display: flex; justify-content: center; gap: 10px; margin-top: 20px; }
         .cd-box { background: rgba(255,255,255,0.2); padding: 10px; border-radius: 12px; min-width: 60px; text-align: center; border: 1px solid rgba(255,255,255,0.1); backdrop-filter: blur(5px); }
         .cd-num { font-size: 1.5rem; font-weight: 800; display: block; line-height: 1; }
@@ -76,120 +64,47 @@
     </style>
 </head>
 <body>
-
     <div class="ticker-wrap"><div class="ticker">🛑 NOTICE: NIMCET 2026 Tentative Date: June 7, 2026 | Target: 550+ Marks for Top NITs | Consistency is Key...</div></div>
-
-    <div class="nav-container">
-        <a href="index.html" class="nav-btn active">NIMCET</a>
-        <a href="cuet.html" class="nav-btn">CUET PG</a>
-    </div>
-
+    <div class="nav-container"><a href="index.html" class="nav-btn active">NIMCET</a><a href="cuet.html" class="nav-btn">CUET PG</a></div>
     <div class="header-container">
         <div class="blob" style="width: 100px; height: 100px; top: -20px; left: -20px;"></div>
         <div class="header-content">
-            <div class="top-nav">
-                <div class="badge">🚀 TARGET: AIR 1</div>
-                <button class="theme-toggle" onclick="toggleTheme()">🌗</button>
-            </div>
+            <div class="top-nav"><div class="badge">🚀 TARGET: AIR 1</div><button class="theme-toggle" onclick="toggleTheme()">🌗</button></div>
             <h1 id="user-name" onclick="editName()" style="margin:0; font-size: 1.6rem; cursor: pointer; border-bottom: 1px dashed rgba(255,255,255,0.3);">Hello, Future NITian 👋</h1>
             <p style="opacity: 0.9; font-size: 0.9rem; margin-top: 5px;">Your journey to NIT starts here.</p>
-
             <div class="countdown-display">
-                <div class="cd-box"><span class="cd-num" id="d">00</span><span class="cd-txt">DAYS</span></div>
-                <div class="cd-box"><span class="cd-num" id="h">00</span><span class="cd-txt">HRS</span></div>
-                <div class="cd-box"><span class="cd-num" id="m">00</span><span class="cd-txt">MIN</span></div>
-                <div class="cd-box"><span class="cd-num" id="s">00</span><span class="cd-txt">SEC</span></div>
+                <div class="cd-box"><span class="cd-num" id="d">00</span><span class="cd-txt">DAYS</span></div><div class="cd-box"><span class="cd-num" id="h">00</span><span class="cd-txt">HRS</span></div><div class="cd-box"><span class="cd-num" id="m">00</span><span class="cd-txt">MIN</span></div><div class="cd-box"><span class="cd-num" id="s">00</span><span class="cd-txt">SEC</span></div>
             </div>
         </div>
     </div>
-
     <div class="dashboard-grid">
-        <div class="stat-card"><span class="stat-val" id="total-progress">0%</span><span class="stat-label">Syllabus Done</span></div>
-        <div class="stat-card"><span class="stat-val" style="color: var(--secondary);">120</span><span class="stat-label">Total Topics</span></div>
-        <div class="stat-card"><span class="stat-val" style="color: var(--accent);">550+</span><span class="stat-label">Target Score</span></div>
+        <div class="stat-card"><span class="stat-val" id="total-progress">0%</span><span class="stat-label">Syllabus Done</span></div><div class="stat-card"><span class="stat-val" style="color: var(--secondary);">120</span><span class="stat-label">Total Topics</span></div><div class="stat-card"><span class="stat-val" style="color: var(--accent);">550+</span><span class="stat-label">Target Score</span></div>
     </div>
-
     <div class="quote-box" id="quote-display"></div>
-
     <div class="main-content" id="syllabus-wrapper"></div>
-
     <div class="footer-watermark">⚡ Crafted & Engineered by Tejraj Shete ⚡</div>
-
 <script>
     const TARGET_DATE = new Date("June 7, 2026 09:00:00").getTime();
-    
-    const SYLLABUS = [
-        { category: "Mathematics", color: "#6366f1", topics: ["Set Theory", "Probability", "Statistics", "Vectors", "Coordinate Geometry", "Calculus", "Trigonometry", "Matrices", "Quadratic Equations"] },
-        { category: "Logical Reasoning", color: "#ec4899", topics: ["Coding-Decoding", "Series", "Blood Relations", "Seating Arrangement", "Syllogism", "Clocks & Calendars", "Directions", "Puzzles"] },
-        { category: "Computer Awareness", color: "#10b981", topics: ["Data Representation", "Boolean Algebra", "Computer Basics", "Truth Tables", "Logic Gates", "Binary Arithmetic"] },
-        { category: "General English", color: "#0ea5e9", topics: ["Vocabulary", "Comprehension", "Basic Grammar", "Idioms & Phrases"] }
-    ];
-
+    const SYLLABUS = [{ category: "Mathematics", color: "#6366f1", topics: ["Set Theory", "Probability", "Statistics", "Vectors", "Coordinate Geometry", "Calculus", "Trigonometry", "Matrices", "Quadratic Equations"] }, { category: "Logical Reasoning", color: "#ec4899", topics: ["Coding-Decoding", "Series", "Blood Relations", "Seating Arrangement", "Syllogism", "Clocks & Calendars", "Directions", "Puzzles"] }, { category: "Computer Awareness", color: "#10b981", topics: ["Data Representation", "Boolean Algebra", "Computer Basics", "Truth Tables", "Logic Gates", "Binary Arithmetic"] }, { category: "General English", color: "#0ea5e9", topics: ["Vocabulary", "Comprehension", "Basic Grammar", "Idioms & Phrases"] }];
     const QUOTES = ["Believe you can and you're halfway there.", "Your future is created by what you do today.", "Dream big. Work hard. Stay humble."];
-
-    function toggleTheme() {
-        const newTheme = document.documentElement.getAttribute("data-theme") === "dark" ? "light" : "dark";
-        document.documentElement.setAttribute("data-theme", newTheme);
-        localStorage.setItem("theme", newTheme);
-    }
+    function toggleTheme() { const n = document.documentElement.getAttribute("data-theme") === "dark" ? "light" : "dark"; document.documentElement.setAttribute("data-theme", n); localStorage.setItem("theme", n); }
     document.documentElement.setAttribute("data-theme", localStorage.getItem("theme") || "light");
-
-    function editName() {
-        const name = prompt("Enter Name:");
-        if(name) { localStorage.setItem("nimcetUser", name); document.getElementById("user-name").innerHTML = `Hello, ${name} 👋`; }
-    }
-
+    function editName() { const n = prompt("Enter Name:"); if(n) { localStorage.setItem("nimcetUser", n); document.getElementById("user-name").innerHTML = `Hello, ${n} 👋`; } }
     function initApp() {
-        const savedName = localStorage.getItem("nimcetUser");
-        if(savedName) document.getElementById("user-name").innerHTML = `Hello, ${savedName} 👋`;
-
-        const wrapper = document.getElementById('syllabus-wrapper');
-        const savedData = JSON.parse(localStorage.getItem('nimcetProgressV3')) || {};
-        let total = 0, completed = 0;
-
-        SYLLABUS.forEach((section, sIdx) => {
-            let secComp = 0;
-            section.topics.forEach((t, tIdx) => { if(savedData[`${sIdx}_${tIdx}`]) secComp++; });
-            total += section.topics.length; completed += secComp;
-            
-            const card = document.createElement('div');
-            card.className = 'subject-group';
-            card.style.borderLeft = `4px solid ${section.color}`;
-            let list = '';
-            section.topics.forEach((t, i) => {
-                const id = `${sIdx}_${i}`;
-                const chk = savedData[id] ? 'checked' : '';
-                list += `<label class="topic-item"><input type="checkbox" class="cb-input" id="${id}" ${chk} onchange="toggleTopic('${id}')"><span class="custom-cb" style="border-color:${chk?section.color:''};background:${chk?section.color:''}"><style>.cb-input:checked+#${id}+.custom-cb::after{content:'✓';color:white}</style></span><span class="topic-text">${t}</span></label>`;
-            });
-            card.innerHTML = `<div class="subject-header" onclick="this.nextElementSibling.hidden=!this.nextElementSibling.hidden"><span class="subject-name" style="color:${section.color}">${section.category}</span><span style="font-size:0.8rem;color:#64748b">${Math.round((secComp/section.topics.length)*100)}%</span></div><div class="topic-list" ${secComp===section.topics.length?'hidden':''}>${list}</div>`;
-            wrapper.appendChild(card);
+        const s = localStorage.getItem("nimcetUser"); if(s) document.getElementById("user-name").innerHTML = `Hello, ${s} 👋`;
+        const w = document.getElementById('syllabus-wrapper'), d = JSON.parse(localStorage.getItem('nimcetProgressV3')) || {};
+        let t = 0, c = 0;
+        SYLLABUS.forEach((sec, si) => {
+            let sc = 0; sec.topics.forEach((x, xi) => { if(d[`${si}_${xi}`]) sc++; }); t += sec.topics.length; c += sc;
+            const card = document.createElement('div'); card.className = 'subject-group'; card.style.borderLeft = `4px solid ${sec.color}`;
+            let l = ''; sec.topics.forEach((tp, i) => { const id = `${si}_${i}`, k = d[id] ? 'checked' : ''; l += `<label class="topic-item"><input type="checkbox" class="cb-input" id="${id}" ${k} onchange="toggleTopic('${id}')"><span class="custom-cb" style="border-color:${k?sec.color:''};background:${k?sec.color:''}"><style>.cb-input:checked+#${id}+.custom-cb::after{content:'✓';color:white}</style></span><span class="topic-text">${tp}</span></label>`; });
+            card.innerHTML = `<div class="subject-header" onclick="this.nextElementSibling.hidden=!this.nextElementSibling.hidden"><span class="subject-name" style="color:${sec.color}">${sec.category}</span><span style="font-size:0.8rem;color:#64748b">${Math.round((sc/sec.topics.length)*100)}%</span></div><div class="topic-list" ${sc===sec.topics.length?'hidden':''}>${l}</div>`; w.appendChild(card);
         });
-        document.getElementById('total-progress').innerText = Math.round((completed/total)*100) + "%";
-        document.getElementById('quote-display').innerText = QUOTES[Math.floor(Math.random() * QUOTES.length)];
+        document.getElementById('total-progress').innerText = Math.round((c/t)*100) + "%"; document.getElementById('quote-display').innerText = QUOTES[Math.floor(Math.random() * QUOTES.length)];
     }
-
-    function toggleTopic(id) {
-        const data = JSON.parse(localStorage.getItem('nimcetProgressV3')) || {};
-        document.getElementById(id).checked ? data[id]=true : delete data[id];
-        localStorage.setItem('nimcetProgressV3', JSON.stringify(data));
-        location.reload();
-    }
-    
-    // TIMER LOGIC ADDED BACK
-    function updateTimer() {
-        const now = new Date().getTime();
-        const dist = TARGET_DATE - now;
-        if (dist > 0) {
-            document.getElementById("d").innerText = Math.floor(dist / (1000 * 60 * 60 * 24)).toString().padStart(2,'0');
-            document.getElementById("h").innerText = Math.floor((dist % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)).toString().padStart(2,'0');
-            document.getElementById("m").innerText = Math.floor((dist % (1000 * 60 * 60)) / (1000 * 60)).toString().padStart(2,'0');
-            document.getElementById("s").innerText = Math.floor((dist % (1000 * 60)) / 1000).toString().padStart(2,'0');
-        }
-    }
-    setInterval(updateTimer, 1000);
-    updateTimer();
-
-    initApp();
+    function toggleTopic(id) { const d = JSON.parse(localStorage.getItem('nimcetProgressV3')) || {}; document.getElementById(id).checked ? d[id]=true : delete d[id]; localStorage.setItem('nimcetProgressV3', JSON.stringify(d)); location.reload(); }
+    function updateTimer() { const n = new Date().getTime(), ds = TARGET_DATE - n; if (ds > 0) { document.getElementById("d").innerText = Math.floor(ds/(1000*60*60*24)).toString().padStart(2,'0'); document.getElementById("h").innerText = Math.floor((ds%(1000*60*60*24))/(1000*60*60)).toString().padStart(2,'0'); document.getElementById("m").innerText = Math.floor((ds%(1000*60*60))/(1000*60)).toString().padStart(2,'0'); document.getElementById("s").innerText = Math.floor((ds%(1000*60))/1000).toString().padStart(2,'0'); } }
+    setInterval(updateTimer, 1000); updateTimer(); initApp();
 </script>
 </body>
 </html>
