@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CUET PG 2026 Tracker</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* CUET THEME: JNU Red & Teal */
+            --primary: #be123c; 
+            --primary-dark: #881337;
+            --secondary: #0d9488; 
+            --accent: #f59e0b; 
+            --bg: #fff1f2; 
+            --surface: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --shadow: 0 4px 6px -1px rgba(190, 18, 60, 0.1);
+        }
+
+        [data-theme="dark"] {
+            --bg: #0f172a; --surface: #1e293b; --text-main: #f1f5f9; --text-muted: #94a3b8; --border: #334155;
+        }
+
+        * { box-sizing: border-box; transition: 0.3s; }
+        body { font-family: 'Inter', sans-serif; background-color: var(--bg); color: var(--text-main); margin: 0; padding-bottom: 20px; }
+
+        .ticker-wrap { position: fixed; top: 0; width: 100%; height: 30px; background: var(--primary-dark); color: white; font-size: 0.8rem; line-height: 30px; z-index: 1000; overflow: hidden; }
+        .ticker { display: inline-block; white-space: nowrap; animation: ticker 25s linear infinite; padding-left: 100%; }
+        @keyframes ticker { 0% { transform: translate3d(0, 0, 0); } 100% { transform: translate3d(-100%, 0, 0); } }
+
+        /* NAV BAR */
+        .nav-container { display: flex; justify-content: center; gap: 15px; margin-top: 40px; padding: 10px; position: relative; z-index: 1001; }
+        .nav-btn { text-decoration: none; padding: 8px 20px; border-radius: 50px; font-size: 0.85rem; font-weight: 700; transition: all 0.2s; border: 1px solid var(--border); background: rgba(255,255,255,0.5); color: var(--text-muted); }
+        .nav-btn.active { background: var(--primary); color: white; border-color: var(--primary); box-shadow: 0 4px 12px rgba(190, 18, 60, 0.4); transform: scale(1.05); }
+
+        .header-container { margin: 10px 20px; padding: 25px; background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white; border-radius: 25px; box-shadow: 0 10px 25px rgba(190, 18, 60, 0.3); position: relative; overflow: hidden; }
+        .header-content { position: relative; z-index: 2; }
+        .blob { position: absolute; background: rgba(255,255,255,0.1); border-radius: 50%; animation: float 6s ease-in-out infinite; }
+        @keyframes float { 0% { transform: translateY(0); } 50% { transform: translateY(-20px); } 100% { transform: translateY(0); } }
+
+        .top-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .badge { background: linear-gradient(135deg, #f59e0b, #d97706); padding: 5px 12px; border-radius: 20px; font-size: 0.7rem; font-weight: 800; border: 1px solid rgba(255,255,255,0.2); }
+        .theme-toggle { background: none; border: none; color: white; font-size: 1.2rem; cursor: pointer; }
+
+        /* COUNTDOWN TIMER STYLES */
+        .countdown-display { display: flex; justify-content: center; gap: 10px; margin-top: 20px; }
+        .cd-box { background: rgba(255,255,255,0.2); padding: 10px; border-radius: 12px; min-width: 60px; text-align: center; border: 1px solid rgba(255,255,255,0.1); backdrop-filter: blur(5px); }
+        .cd-num { font-size: 1.5rem; font-weight: 800; display: block; line-height: 1; }
+        .cd-txt { font-size: 0.6rem; opacity: 0.9; margin-top: 5px; display: block; font-weight: 600; letter-spacing: 1px; }
+
+        .dashboard-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 15px; padding: 0 20px; margin-top: 20px; }
+        .stat-card { background: var(--surface); padding: 15px; border-radius: 16px; text-align: center; border: 1px solid var(--border); box-shadow: var(--shadow); }
+        .stat-val { font-size: 1.6rem; font-weight: 800; color: var(--primary); display: block; }
+        .stat-label { font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700; }
+
+        .main-content { padding: 20px; max-width: 800px; margin: 0 auto; }
+        .subject-group { background: var(--surface); border-radius: 16px; padding: 18px; margin-bottom: 15px; border: 1px solid var(--border); box-shadow: var(--shadow); }
+        .subject-header { display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
+        .subject-name { font-weight: 700; color: var(--text-main); }
+        .topic-list { margin-top: 15px; border-top: 1px solid var(--border); padding-top: 10px; }
+        .topic-item { display: flex; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--border); }
+        
+        .custom-cb { width: 20px; height: 20px; border: 2px solid var(--text-muted); border-radius: 5px; margin-right: 12px; display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0; }
+        .cb-input { display: none; }
+        .cb-input:checked + .custom-cb { background: var(--primary); border-color: var(--primary); }
+        .cb-input:checked + .custom-cb::after { content: '✓'; color: white; font-size: 12px; }
+        .cb-input:checked ~ .topic-text { text-decoration: line-through; color: var(--text-muted); opacity: 0.6; }
+        .topic-text { font-size: 0.9rem; cursor: pointer; }
+
+        .footer-watermark { text-align: center; margin-top: 40px; padding: 20px; border-top: 1px solid var(--border); font-size: 0.75rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
+    </style>
+</head>
+<body>
+
+    <div class="ticker-wrap"><div class="ticker">🛑 NOTICE: CUET-PG 2026 Tentative Date: March 2026 | Target: JNU, DU & BHU | Focus: Domain Knowledge (75 Qs) | No General Paper...</div></div>
+
+    <div class="nav-container">
+        <a href="index.html" class="nav-btn">NIMCET</a>
+        <a href="cuet.html" class="nav-btn active">CUET PG</a>
+    </div>
+
+    <div class="header-container">
+        <div class="blob" style="width: 100px; height: 100px; top: -20px; left: -20px;"></div>
+        <div class="header-content">
+            <div class="top-nav">
+                <div class="badge">🎓 TARGET: JNU / BHU / DU</div>
+                <button class="theme-toggle" onclick="toggleTheme()">🌗</button>
+            </div>
+            <h1 id="user-name" onclick="editName()" style="margin:0; font-size: 1.6rem; cursor: pointer; border-bottom: 1px dashed rgba(255,255,255,0.3);">Hello, Future Topper 👋</h1>
+            <p style="opacity: 0.9; font-size: 0.9rem; margin-top: 5px;">Dream Big. Pay Less. Learn More.</p>
+
+            <div class="countdown-display">
+                <div class="cd-box"><span class="cd-num" id="d">00</span><span class="cd-txt">DAYS</span></div>
+                <div class="cd-box"><span class="cd-num" id="h">00</span><span class="cd-txt">HRS</span></div>
+                <div class="cd-box"><span class="cd-num" id="m">00</span><span class="cd-txt">MIN</span></div>
+                <div class="cd-box"><span class="cd-num" id="s">00</span><span class="cd-txt">SEC</span></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="dashboard-grid">
+        <div class="stat-card"><span class="stat-val" id="total-progress">0%</span><span class="stat-label">Syllabus Done</span></div>
+        <div class="stat-card"><span class="stat-val" style="color: var(--secondary);">75</span><span class="stat-label">Total Qs</span></div>
+        <div class="stat-card"><span class="stat-val" style="color: var(--accent);">200+</span><span class="stat-label">Safe Score</span></div>
+    </div>
+
+    <div class="main-content" id="syllabus-wrapper"></div>
+
+    <div class="footer-watermark">⚡ Crafted & Engineered by Tejraj Shete ⚡</div>
+
+<script>
+    const SYLLABUS = [
+        { category: "Thinking & Decision Making (Logic)", color: "#f59e0b", topics: ["Logical Reasoning", "Creative Problem Solving", "Patterns & Sequences", "Assessment of Figures", "Geometrical Designs"] },
+        { category: "Mathematics (High Weightage)", color: "#be123c", topics: ["Set Theory", "Algebra & Matrices", "Coordinate Geometry", "Calculus (Vector/Integral)", "Trigonometry", "Real Analysis", "Complex Numbers", "Linear Programming"] },
+        { category: "Computer Awareness (Core)", color: "#0d9488", topics: ["Operating System Basics", "Data Structure (Arrays/Stacks)", "Digital Fundamentals (Gates/Boolean)", "Computer Organization (CPU/Memory)", "C Basics"] }
+    ];
+
+    function toggleTheme() {
+        const newTheme = document.documentElement.getAttribute("data-theme") === "dark" ? "light" : "dark";
+        document.documentElement.setAttribute("data-theme", newTheme);
+        localStorage.setItem("cuetTheme", newTheme);
+    }
+    document.documentElement.setAttribute("data-theme", localStorage.getItem("cuetTheme") || "light");
+
+    function editName() {
+        const name = prompt("Enter Name:");
+        if(name) { localStorage.setItem("cuetUser", name); document.getElementById("user-name").innerHTML = `Hello, ${name} 👋`; }
+    }
+
+    function initApp() {
+        const savedName = localStorage.getItem("cuetUser");
+        if(savedName) document.getElementById("user-name").innerHTML = `Hello, ${savedName} 👋`;
+
+        const wrapper = document.getElementById('syllabus-wrapper');
+        const savedData = JSON.parse(localStorage.getItem('cuetProgress2026')) || {};
+        let total = 0, completed = 0;
+
+        SYLLABUS.forEach((section, sIdx) => {
+            let secComp = 0;
+            section.topics.forEach((t, tIdx) => { if(savedData[`${sIdx}_${tIdx}`]) secComp++; });
+            total += section.topics.length; completed += secComp;
+            
+            const card = document.createElement('div');
+            card.className = 'subject-group';
+            card.style.borderLeft = `4px solid ${section.color}`;
+            let list = '';
+            section.topics.forEach((t, i) => {
+                const id = `${sIdx}_${i}`;
+                const chk = savedData[id] ? 'checked' : '';
+                list += `<label class="topic-item"><input type="checkbox" class="cb-input" id="${id}" ${chk} onchange="toggleTopic('${id}')"><span class="custom-cb" style="border-color:${chk?section.color:''};background:${chk?section.color:''}"><style>.cb-input:checked+#${id}+.custom-cb::after{content:'✓';color:white}</style></span><span class="topic-text">${t}</span></label>`;
+            });
+            card.innerHTML = `<div class="subject-header" onclick="this.nextElementSibling.hidden=!this.nextElementSibling.hidden"><span class="subject-name" style="color:${section.color}">${section.category}</span><span style="font-size:0.8rem;color:#64748b">${Math.round((secComp/section.topics.length)*100)}%</span></div><div class="topic-list" ${secComp===section.topics.length?'hidden':''}>${list}</div>`;
+            wrapper.appendChild(card);
+        });
+        document.getElementById('total-progress').innerText = Math.round((completed/total)*100) + "%";
+    }
+
+    function toggleTopic(id) {
+        const data = JSON.parse(localStorage.getItem('cuetProgress2026')) || {};
+        document.getElementById(id).checked ? data[id]=true : delete data[id];
+        localStorage.setItem('cuetProgress2026', JSON.stringify(data));
+        location.reload();
+    }
+    
+    // TIMER LOGIC ADDED BACK
+    const TARGET_DATE = new Date("March 15, 2026 09:00:00").getTime();
+    function updateTimer() {
+        const now = new Date().getTime();
+        const dist = TARGET_DATE - now;
+        if (dist > 0) {
+            document.getElementById("d").innerText = Math.floor(dist / (1000 * 60 * 60 * 24)).toString().padStart(2,'0');
+            document.getElementById("h").innerText = Math.floor((dist % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)).toString().padStart(2,'0');
+            document.getElementById("m").innerText = Math.floor((dist % (1000 * 60 * 60)) / (1000 * 60)).toString().padStart(2,'0');
+            document.getElementById("s").innerText = Math.floor((dist % (1000 * 60)) / 1000).toString().padStart(2,'0');
+        }
+    }
+    setInterval(updateTimer, 1000);
+    updateTimer();
+
+    initApp();
+</script>
+</body>
+</html>
